@@ -15,8 +15,7 @@ import androidx.navigation.NavController
 @Composable
 fun ContactFormScreen(
     contactViewModel: ContactViewModel = viewModel(),
-    navController: NavController,
-    onContactAdded: () -> Unit
+    navController: NavController
 ) {
     var nombre by remember { mutableStateOf("") }
     var apellido by remember { mutableStateOf("") }
@@ -84,7 +83,7 @@ fun ContactFormScreen(
 
                     onClick = {
                         contactViewModel.addContact(Contact(nombre, apellido, telefono, hobby))
-                        onContactAdded()
+                        navController.navigate("contactList")
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)

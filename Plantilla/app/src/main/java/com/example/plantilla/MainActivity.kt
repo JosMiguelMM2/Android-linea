@@ -1,4 +1,5 @@
 package com.example.plantilla
+
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -33,14 +34,9 @@ class MainActivity : ComponentActivity() {
                         startDestination = "contactForm",
                         modifier = Modifier.padding(innerPadding) // El padding se aplica aquí
                     ) {
-                        // Pantalla de formulario de contacto
                         composable("contactForm") {
-                            ContactFormScreen(
-                                navController=navController,
-                                onContactAdded = { navController.navigate("contactList") }
-                            )
+                            ContactFormScreen(navController = navController)
                         }
-                        // Pantalla para listar contactos
                         composable("contactList") {
                             ContactListScreen(navController = navController)
                         }
