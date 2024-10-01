@@ -10,24 +10,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.plantilla.Entity.Contactos
-import com.example.plantilla.Model.ContactViewModel
+import androidx.navigation.NavBackStackEntry
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ContactFormScreen(
+fun EditContactScreen(
     contactViewModel: ContactViewModel = viewModel(),
-    navController: NavController
+    navController: NavController,
+    backStackEntry: NavBackStackEntry
 ) {
-    var nombre by remember { mutableStateOf("") }
-    var apellido by remember { mutableStateOf("") }
-    var telefono by remember { mutableStateOf("") }
-    var hobby by remember { mutableStateOf("") }
+    val contactName = backStackEntry.arguments?.getString("contactName") ?: return
+    val contact = contactViewModel.contactList.find { it.nombre == contactName } ?: return
+
+    var nombre by remember { mutableStateOf(contact.nombre) }
+    var apellido by remember { mutableStateOf(contact.apellido) }
+    var telefono by remember { mutableStateOf(contact.telefono) }
+    var hobby by remember { mutableStateOf(contact.hobby) }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Agregar contacto") }
+                title = { Text("Editar contacto") }
             )
         },
         content = { innerPadding ->
@@ -82,22 +85,20 @@ fun ContactFormScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
-
                     onClick = {
-                        val newContact = Contactos(
+                        val updatedContact = Contact(
                             nombre = nombre,
                             apellido = apellido,
-                            telefono = telefono.toLong(),
+                            telefono = telefono,
                             hobby = hobby
                         )
-
-                        contactViewModel.addContact(newContact)
+                        contactViewModel.updateContact(contact, updatedContact)
                         navController.navigate("contactList")
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
                 ) {
-                    Text("Registrar", fontSize = 18.sp)
+                    Text("Guardar", fontSize = 18.sp)
                 }
             }
         }

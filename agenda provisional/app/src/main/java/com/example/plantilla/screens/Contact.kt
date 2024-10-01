@@ -14,6 +14,16 @@ class ContactViewModel : ViewModel() {
 
     fun addContact(contact: Contact) {
         contactList.add(contact)
-        println("Datos agregados $contactList")
+    }
+
+    fun removeContact(contact: Contact) {
+        contactList.remove(contact)
+    }
+
+    fun updateContact(oldContact: Contact, newContact: Contact) {
+        val index = contactList.indexOf(oldContact)
+        if (index != -1) {
+            contactList[index] = newContact
+        }
     }
 }

@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.plantilla.screens.ContactFormScreen
 import com.example.plantilla.screens.ContactListScreen
+import com.example.plantilla.screens.ContactViewModel
+import com.example.plantilla.screens.EditContactScreen
 import com.example.plantilla.ui.theme.PlantillaTheme
 
 class MainActivity : ComponentActivity() {
@@ -28,16 +31,20 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
                     // Aseguramos que el NavHost respete el padding
+                    val contactViewModel: ContactViewModel = viewModel()
                     NavHost(
                         navController = navController,
                         startDestination = "contactForm",
                         modifier = Modifier.padding(innerPadding) // El padding se aplica aquí
                     ) {
                         composable("contactForm") {
-                            ContactFormScreen(navController = navController)
+                            ContactFormScreen(contactViewModel,navController = navController)
                         }
                         composable("contactList") {
-                            ContactListScreen(navController = navController)
+                            ContactListScreen(navController = navController, contactViewModel = contactViewModel)
+                        }
+                        composable("editContact/{contactName}") { backStackEntry ->
+                            EditContactScreen(contactViewModel, navController, backStackEntry)
                         }
                     }
                 }

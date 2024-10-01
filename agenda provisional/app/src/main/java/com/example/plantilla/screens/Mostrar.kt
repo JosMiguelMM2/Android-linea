@@ -32,7 +32,6 @@ fun ContactListScreen(
             ) {
                 Button(
                     onClick = {
-
                         navController.navigate("contactForm")
                     },
                     modifier = Modifier.fillMaxWidth(),
@@ -40,28 +39,23 @@ fun ContactListScreen(
                 ) {
                     Text("Registrar", fontSize = 18.sp)
                 }
-                // Verificamos si la lista de contactos está vacía
-                if (contactViewModel.contactList.isEmpty()) {
-                    Text("No hay contactos registrados.")
-                    println("__________________________________ ${contactViewModel.contactList}")
-                } else {
-                    // LazyColumn para mostrar la lista de contactos
                     LazyColumn(
                         modifier = Modifier.fillMaxSize()
                     ) {
                         // items toma la lista de contactos y los dibuja en la UI
                         items(contactViewModel.contactList) { contact ->
-                            ContactItem(contact)
+                            ContactItem(contact, contactViewModel, navController)
                         }
                     }
-                }
+
             }
         }
     )
 }
 
 @Composable
-fun ContactItem(contact: Contact) {
+fun ContactItem(contact: Contact,
+                contactViewModel: ContactViewModel, navController: NavController) {
     // Cada contacto se muestra en una tarjeta
     Card(
         modifier = Modifier
@@ -77,6 +71,20 @@ fun ContactItem(contact: Contact) {
             Text(text = "Teléfono: ${contact.telefono}", style = MaterialTheme.typography.bodyMedium)
             Spacer(modifier = Modifier.height(4.dp))
             Text(text = "Hobby: ${contact.hobby}", style = MaterialTheme.typography.bodyMedium)
+        }
+        Button(
+            onClick = { contactViewModel.removeContact(contact) },
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+        ) {
+            Text("Eliminar")
+        }
+
+        Spacer(modifier = Modifier.width(8.dp))
+        Button(
+            onClick = { navController.navigate("editContact/${contact.nombre}") },
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+        ) {
+            Text("Editar")
         }
     }
 }
