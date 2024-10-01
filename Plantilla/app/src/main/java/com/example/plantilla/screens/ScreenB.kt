@@ -50,7 +50,6 @@ fun ContactListScreen(
                         modifier = Modifier.fillMaxSize()
                     ) {
                         // items toma la lista de contactos y los dibuja en la UI
-
                         items(contactViewModel.contactList) { contact ->
                             ContactItem(contact)
                         }

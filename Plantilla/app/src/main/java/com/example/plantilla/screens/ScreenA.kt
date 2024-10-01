@@ -10,6 +10,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.plantilla.Entity.Contactos
+import com.example.plantilla.Model.ContactViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,7 +84,14 @@ fun ContactFormScreen(
                 Button(
 
                     onClick = {
-                        contactViewModel.addContact(Contact(nombre, apellido, telefono, hobby))
+                        val newContact = Contactos(
+                            nombre = nombre,
+                            apellido = apellido,
+                            telefono = telefono.toLong(),
+                            hobby = hobby
+                        )
+
+                        contactViewModel.addContact(newContact)
                         navController.navigate("contactList")
                     },
                     modifier = Modifier.fillMaxWidth(),
