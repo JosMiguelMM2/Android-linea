@@ -18,9 +18,9 @@ abstract class ContactosDatabase : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     ContactosDatabase::class.java,
-                    "registro_contactos_database"
+                    "contactos_database"
                 )
-                    .fallbackToDestructiveMigration()
+                    //.fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
                 instance

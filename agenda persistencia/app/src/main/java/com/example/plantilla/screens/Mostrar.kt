@@ -1,5 +1,5 @@
 package com.example.plantilla.screens
-
+/*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -87,4 +87,4 @@ fun ContactItem(contact: Contact,
             Text("Editar")
         }
     }
-}
+}*/

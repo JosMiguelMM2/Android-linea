@@ -8,19 +8,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.plantilla.data.Contacto
+import com.example.plantilla.data.ContactoRepository1
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactFormScreen(
-    contactViewModel: ContactViewModel = viewModel(),
-    navController: NavController
+    navController: NavController,
+    userRepository1: ContactoRepository1
 ) {
     var nombre by remember { mutableStateOf("") }
     var apellido by remember { mutableStateOf("") }
     var telefono by remember { mutableStateOf("") }
     var hobby by remember { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -80,17 +83,16 @@ fun ContactFormScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
-
                     onClick = {
-
-                        val newContact = Contact(
-                            nombre = nombre,
-                            apellido = apellido,
-                            telefono = telefono,
-                            hobby = hobby
-                        )
-
-                        contactViewModel.addContact(newContact)
+                        val contacto = Contacto(nombre, apellido, telefono, hobby)
+                        scope.launch {
+                            try {
+                                userRepository1.insert(contacto)
+                                navController.navigate("contactList")
+                            } catch (e: Exception) {
+                                println("Ha ocurrido un error: ${e.message}")
+                            }
+                        }
                         navController.navigate("contactList")
                     },
                     modifier = Modifier.fillMaxWidth(),
