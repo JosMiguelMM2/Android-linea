@@ -10,7 +10,7 @@ interface ContactoDao {
     fun getAllContacts(): Flow<List<Contacto>>
 
     @Query("SELECT * from contactos WHERE telefono = :telefono")
-    fun getContact(telefono: String): Flow<Contacto>
+    suspend fun getContact(telefono: String): Contacto
 
     @Insert
     suspend fun insert(contacto: Contacto)
@@ -21,4 +21,6 @@ interface ContactoDao {
     @Delete
     suspend fun delete(contacto: Contacto)
 
+    @Query("SELECT * FROM contactos WHERE nombre LIKE :name")
+    fun search(name: String): Flow<List<Contacto>>
 }

@@ -11,13 +11,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.plantilla.data.Contacto
 import com.example.plantilla.data.ContactoRepository1
+import com.example.plantilla.model.ModelContacto
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactFormScreen(
     navController: NavController,
-    userRepository1: ContactoRepository1
+    //userRepository1: ContactoRepository1,
+    contactoModal: ModelContacto
 ) {
     var nombre by remember { mutableStateOf("") }
     var apellido by remember { mutableStateOf("") }
@@ -87,7 +89,8 @@ fun ContactFormScreen(
                         val contacto = Contacto(nombre, apellido, telefono, hobby)
                         scope.launch {
                             try {
-                                userRepository1.insert(contacto)
+                                //userRepository1.insert(contacto)
+                                contactoModal.insert(contacto)
                                 navController.navigate("contactList")
                             } catch (e: Exception) {
                                 println("Ha ocurrido un error: ${e.message}")

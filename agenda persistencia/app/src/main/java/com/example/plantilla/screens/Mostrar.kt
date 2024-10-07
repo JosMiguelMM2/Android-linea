@@ -1,22 +1,32 @@
 package com.example.plantilla.screens
-/*
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.plantilla.data.Contacto
+import com.example.plantilla.model.ModelContacto
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactListScreen(
     navController: NavController,
-    contactViewModel: ContactViewModel = viewModel()
+    contactoModal: ModelContacto
 ) {
+    var searchText by remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit) {
+        contactoModal.getAllContacts()
+    }
+    val contactos = contactoModal.contactos.collectAsState().value
     Scaffold(
         topBar = {
             TopAppBar(
@@ -30,6 +40,25 @@ fun ContactListScreen(
                     .padding(16.dp)
                     .fillMaxSize()
             ) {
+                BasicTextField(
+                    value = searchText,
+                    onValueChange = {
+                        searchText = it
+                        contactoModal.search(it)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    singleLine = true,
+                    textStyle = LocalTextStyle.current.copy(color = Color.White),
+                    decorationBox = { innerTextField ->
+                        if (searchText.isEmpty()) {
+                            Text("Buscar...", style = MaterialTheme.typography.bodyLarge)
+                        }
+                        innerTextField()
+                    }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
                 Button(
                     onClick = {
                         navController.navigate("contactForm")
@@ -39,14 +68,14 @@ fun ContactListScreen(
                 ) {
                     Text("Registrar", fontSize = 18.sp)
                 }
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        // items toma la lista de contactos y los dibuja en la UI
-                        items(contactViewModel.contactList) { contact ->
-                            ContactItem(contact, contactViewModel, navController)
-                        }
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(contactos) { contacto ->
+                        ContactItem(contact = contacto, navController = navController, contactoModal = contactoModal)
                     }
+
+                }
 
             }
         }
@@ -54,9 +83,12 @@ fun ContactListScreen(
 }
 
 @Composable
-fun ContactItem(contact: Contact,
-                contactViewModel: ContactViewModel, navController: NavController) {
-    // Cada contacto se muestra en una tarjeta
+fun ContactItem(
+    contact: Contacto, // Changed to a single Contacto object
+    navController: NavController,
+    contactoModal: ModelContacto
+) {
+    // Each contact is displayed in a card
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -72,19 +104,26 @@ fun ContactItem(contact: Contact,
             Spacer(modifier = Modifier.height(4.dp))
             Text(text = "Hobby: ${contact.hobby}", style = MaterialTheme.typography.bodyMedium)
         }
-        Button(
-            onClick = { contactViewModel.removeContact(contact) },
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-        ) {
-            Text("Eliminar")
-        }
+        Row {
+            Button(
+                onClick = {
+                    contactoModal.delete(contact)
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+            ) {
+                Text("Eliminar")
+            }
 
-        Spacer(modifier = Modifier.width(8.dp))
-        Button(
-            onClick = { navController.navigate("editContact/${contact.nombre}") },
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-        ) {
-            Text("Editar")
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Button(
+
+                onClick = {
+                    navController.navigate("editContact/${contact.telefono}") },
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            ) {
+                Text("Editar")
+            }
         }
     }
-}*/
+}

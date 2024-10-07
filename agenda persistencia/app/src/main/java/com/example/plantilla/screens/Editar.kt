@@ -1,5 +1,5 @@
 package com.example.plantilla.screens
-/*
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
@@ -11,21 +11,23 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavBackStackEntry
+import com.example.plantilla.data.Contacto
+import com.example.plantilla.model.ModelContacto
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditContactScreen(
-    contactViewModel: ContactViewModel = viewModel(),
     navController: NavController,
-    backStackEntry: NavBackStackEntry
+    contactoViewModel: ModelContacto,
+    contact: Contacto
 ) {
-    val contactName = backStackEntry.arguments?.getString("contactName") ?: return
-    val contact = contactViewModel.contactList.find { it.nombre == contactName } ?: return
-
+    println("_______________________________________________________")
     var nombre by remember { mutableStateOf(contact.nombre) }
     var apellido by remember { mutableStateOf(contact.apellido) }
     var telefono by remember { mutableStateOf(contact.telefono) }
     var hobby by remember { mutableStateOf(contact.hobby) }
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -86,14 +88,15 @@ fun EditContactScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
                     onClick = {
-                        val updatedContact = Contact(
-                            nombre = nombre,
-                            apellido = apellido,
-                            telefono = telefono,
-                            hobby = hobby
-                        )
-                        contactViewModel.updateContact(contact, updatedContact)
-                        navController.navigate("contactList")
+                        val updatedContact = Contacto(nombre, apellido, telefono, hobby)
+                        scope.launch {
+                            try {
+                                contactoViewModel.update(updatedContact)
+                                navController.navigate("contactList")
+                            } catch (e: Exception) {
+                                println("Ha ocurrido un error: ${e.message}")
+                            }
+                        }
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
@@ -103,4 +106,4 @@ fun EditContactScreen(
             }
         }
     )
-}*/
+}
