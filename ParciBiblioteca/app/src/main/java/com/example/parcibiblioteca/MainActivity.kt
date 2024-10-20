@@ -14,10 +14,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.parcibiblioteca.Dao.AutoresDao
 import com.example.parcibiblioteca.Dao.LibrosDao
 import com.example.parcibiblioteca.Dao.MiembrosDao
+import com.example.parcibiblioteca.Dao.PrestamosDao
 import com.example.parcibiblioteca.Database.BibliotecaDatabase
 import com.example.parcibiblioteca.Repository.AutoresRepository
 import com.example.parcibiblioteca.Repository.LibrosRepository
 import com.example.parcibiblioteca.Repository.MiembrosRepository
+import com.example.parcibiblioteca.Repository.PrestamosRepository
 import com.example.parcibiblioteca.screens.*
 import com.example.parcibiblioteca.ui.theme.ParciBibliotecaTheme
 
@@ -27,11 +29,13 @@ class MainActivity : ComponentActivity() {
     private lateinit var autoresDao: AutoresDao
     private lateinit var miembrosDao: MiembrosDao
     private lateinit var librosDao: LibrosDao
+    private lateinit var prestamosDao: PrestamosDao
 
     // Repositorios
     private lateinit var autoresRepository: AutoresRepository
     private lateinit var miembrosRepository: MiembrosRepository
     private lateinit var librosRepository: LibrosRepository
+    private lateinit var prestamosRepository: PrestamosRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +50,9 @@ class MainActivity : ComponentActivity() {
         librosDao = db.LibrosDao()
         librosRepository = LibrosRepository(librosDao)
 
+        prestamosDao = db.PrestamosDao()
+        prestamosRepository = PrestamosRepository(prestamosDao)
+
         // Modelos
 
         enableEdgeToEdge()
@@ -55,7 +62,8 @@ class MainActivity : ComponentActivity() {
                     navegationApp(
                         autoresRepository = autoresRepository,
                         miembrosRepository = miembrosRepository,
-                        librosRepository = librosRepository
+                        librosRepository = librosRepository,
+                        prestamosRepository = prestamosRepository
                     )
                 }
             }
@@ -67,7 +75,8 @@ class MainActivity : ComponentActivity() {
 fun navegationApp(
     autoresRepository: AutoresRepository,
     miembrosRepository: MiembrosRepository,
-    librosRepository: LibrosRepository
+    librosRepository: LibrosRepository,
+    prestamosRepository: PrestamosRepository
 ) {
     val navController = rememberNavController()
 
@@ -105,7 +114,10 @@ fun navegationApp(
 
         composable("Prestamos") {
             PrestamosCreateScreen(
-                navController = navController
+                navController = navController,
+                prestamosRepository = prestamosRepository,
+                miembrosRepository = miembrosRepository,
+                librosRepository = librosRepository
             )
         }
     }

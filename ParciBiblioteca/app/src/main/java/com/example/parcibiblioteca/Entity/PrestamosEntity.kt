@@ -9,6 +9,6 @@ data class Prestamos(
     @PrimaryKey(autoGenerate = true) val prestamo_id: Long = 0,
     val libro_id: Long,
     val miembro_id: Long,
-    val fecha_pestamo: Date,
-    val fecha_devolucion: Date
+    val fecha_prestamo: Date,
+    val fecha_devolucion: Date?
 )

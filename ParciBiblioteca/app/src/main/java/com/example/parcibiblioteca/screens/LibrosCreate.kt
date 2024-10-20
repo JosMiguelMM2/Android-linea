@@ -37,7 +37,6 @@ fun LibrosCreateScreen(
     // Cargar los autores en el rememberCoroutineScope
     LaunchedEffect(Unit) {
         autores = autoresRepository.getAllAutores()
-        println(autores)
     }
 
     ParciBibliotecaTheme {
@@ -93,7 +92,7 @@ fun LibrosCreateScreen(
                             .wrapContentSize(Alignment.TopStart)
                     ) {
                         Text(
-                            text = selectedAutor?.nombre ?: "Selecciona un autor",
+                            text = selectedAutor?.let{"${it.nombre} ${it.apellido}"} ?: "Selecciona un autor",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp)
@@ -114,7 +113,7 @@ fun LibrosCreateScreen(
                                         expanded = false
                                     },
                                     text = {
-                                        Text(text = "Autor ${autor.nombre} ${autor.apellido} (${autor.nacionalidad})")
+                                        Text(text = "Autor: ${autor.nombre} ${autor.apellido} (${autor.nacionalidad})")
                                     }
                                 )
                             }
