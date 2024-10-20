@@ -11,8 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.parcibiblioteca.screens.AutoresCreateScreen
-import com.example.parcibiblioteca.screens.MenuScreen
+import com.example.parcibiblioteca.screens.*
 import com.example.parcibiblioteca.ui.theme.ParciBibliotecaTheme
 
 class MainActivity : ComponentActivity() {
@@ -45,6 +44,24 @@ fun navegationApp() {
 
         composable("Autores") {
             AutoresCreateScreen(
+                navController = navController
+            )
+        }
+
+        composable("Miembros") {
+            MiembrosCreateScreen(
+                navController = navController
+            )
+        }
+
+        composable("Libros") {
+            LibrosCreateScreen(
+                navController = navController
+            )
+        }
+
+        composable("Prestamos") {
+            PrestamosCreateScreen(
                 navController = navController
             )
         }

@@ -32,7 +32,7 @@ fun MenuScreen(navController: NavHostController) {
             ) {
                 MenuButton("Autores", "Autores", navController = navController)
                 MenuButton("Libros", "Libros", navController = navController)
-                MenuButton("Préstamos", "Préstamos", navController = navController)
+                MenuButton("Prestamos", "Prestamos", navController = navController)
                 MenuButton("Miembros", "Miembros", navController = navController)
             }
         })
