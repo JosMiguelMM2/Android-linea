@@ -12,9 +12,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.parcibiblioteca.Dao.AutoresDao
+import com.example.parcibiblioteca.Dao.LibrosDao
 import com.example.parcibiblioteca.Dao.MiembrosDao
 import com.example.parcibiblioteca.Database.BibliotecaDatabase
 import com.example.parcibiblioteca.Repository.AutoresRepository
+import com.example.parcibiblioteca.Repository.LibrosRepository
 import com.example.parcibiblioteca.Repository.MiembrosRepository
 import com.example.parcibiblioteca.screens.*
 import com.example.parcibiblioteca.ui.theme.ParciBibliotecaTheme
@@ -24,10 +26,12 @@ class MainActivity : ComponentActivity() {
     // DAO
     private lateinit var autoresDao: AutoresDao
     private lateinit var miembrosDao: MiembrosDao
+    private lateinit var librosDao: LibrosDao
 
     // Repositorios
     private lateinit var autoresRepository: AutoresRepository
     private lateinit var miembrosRepository: MiembrosRepository
+    private lateinit var librosRepository: LibrosRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +43,9 @@ class MainActivity : ComponentActivity() {
         miembrosDao = db.MiembrosDao()
         miembrosRepository = MiembrosRepository(miembrosDao)
 
+        librosDao = db.LibrosDao()
+        librosRepository = LibrosRepository(librosDao)
+
         // Modelos
 
         enableEdgeToEdge()
@@ -47,7 +54,8 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     navegationApp(
                         autoresRepository = autoresRepository,
-                        miembrosRepository = miembrosRepository
+                        miembrosRepository = miembrosRepository,
+                        librosRepository = librosRepository
                     )
                 }
             }
@@ -58,7 +66,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun navegationApp(
     autoresRepository: AutoresRepository,
-    miembrosRepository: MiembrosRepository
+    miembrosRepository: MiembrosRepository,
+    librosRepository: LibrosRepository
 ) {
     val navController = rememberNavController()
 
@@ -88,7 +97,9 @@ fun navegationApp(
 
         composable("Libros") {
             LibrosCreateScreen(
-                navController = navController
+                navController = navController,
+                librosRepository = librosRepository,
+                autoresRepository = autoresRepository
             )
         }
 
