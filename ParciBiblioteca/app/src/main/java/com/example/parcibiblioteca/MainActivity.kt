@@ -11,12 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.parcibiblioteca.Database.BibliotecaDatabase
 import com.example.parcibiblioteca.screens.*
 import com.example.parcibiblioteca.ui.theme.ParciBibliotecaTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val db = BibliotecaDatabase.getDatabase(applicationContext)
         enableEdgeToEdge()
         setContent {
             ParciBibliotecaTheme {
