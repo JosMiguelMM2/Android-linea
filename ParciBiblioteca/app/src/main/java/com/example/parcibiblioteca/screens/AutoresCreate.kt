@@ -46,6 +46,22 @@ fun AutoresCreateScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+
+                    Button(
+                        onClick = {
+                            navController.navigate("AutoresList")
+                        },
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colors.secondary,
+                            contentColor = colors.onPrimary
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    ) {
+                        Text("Autores Guardados", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                    }
                     OutlinedTextField(
                         value = nombre,
                         onValueChange = { nombre = it },

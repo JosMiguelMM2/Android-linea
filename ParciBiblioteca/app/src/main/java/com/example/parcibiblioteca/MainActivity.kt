@@ -120,6 +120,11 @@ fun navegationApp(
                 librosRepository = librosRepository
             )
         }
+        composable("AutoresList") {
+            AutoresListScreen(
+                autoresRepository = autoresRepository
+            )
+        }
     }
 
 }
