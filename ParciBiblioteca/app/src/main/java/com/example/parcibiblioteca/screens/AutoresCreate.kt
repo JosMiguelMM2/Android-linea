@@ -11,15 +11,21 @@ import androidx.compose.ui.unit.sp
 import com.example.parcibiblioteca.ui.theme.ParciBibliotecaTheme
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
+import com.example.parcibiblioteca.Entity.Autores
+import com.example.parcibiblioteca.Repository.AutoresRepository
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AutoresCreateScreen(navController: NavHostController) {
+fun AutoresCreateScreen(
+    navController: NavHostController,
+    autoresRepository: AutoresRepository
+) {
     var nombre by remember { mutableStateOf("") }
     var apellido by remember { mutableStateOf("") }
     var nacionalidad by remember { mutableStateOf("") }
     val colors = MaterialTheme.colorScheme
-
+    val scope = rememberCoroutineScope()
     ParciBibliotecaTheme {
         Scaffold(
             topBar = {
@@ -71,7 +77,20 @@ fun AutoresCreateScreen(navController: NavHostController) {
                         modifier = Modifier.fillMaxWidth()
                     )
                     Button(
-                        onClick = { /* TODO: Handle save action */ },
+                        onClick = {
+                            if (nombre.isNotEmpty() && apellido.isNotEmpty() && nacionalidad.isNotEmpty()) {
+                                val nuevoAutor = Autores(
+                                    nombre = nombre,
+                                    apellido = apellido,
+                                    nacionalidad = nacionalidad
+                                )
+                                scope.launch {
+                                    autoresRepository.insertAutor(nuevoAutor)
+                                    navController.popBackStack()
+                                }
+                            }
+
+                        },
                         shape = RoundedCornerShape(8.dp),
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colors.secondary,

@@ -76,4 +76,10 @@ dependencies {
     // Coroutines para el manejo de flujos asincrónicos
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
+
+    // Añadir las siguientes dependencias necesarias para usar StateFlow y collectAsState en Compose:
+    implementation(libs.androidx.runtime.livedata) // Dependencia para collectAsState
+    implementation(libs.androidx.lifecycle.runtime.compose) // Para usar StateFlow con Compose
+
+    implementation (libs.androidx.runtime)
 }
