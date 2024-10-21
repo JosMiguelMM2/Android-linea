@@ -17,7 +17,7 @@ class AutoresConLibrosModel(private val repository: AutoresConLibrosRepository) 
             val data = repository.getAutoresConLibros()
             val groupedData = data.groupBy { it.autor }
                 .map { (autor, librosConAutores) ->
-                    AutoresConLibros(autor, librosConAutores.flatMap { it.libros })
+                    AutoresConLibros(autor, librosConAutores.flatMap { it.libros }.distinctBy { it.libro_id })
                 }
             autoresConLibros.value = groupedData
         }
