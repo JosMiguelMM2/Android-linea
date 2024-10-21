@@ -1,6 +1,7 @@
 package com.example.parcibiblioteca.Dao
 
 import androidx.room.*
+import com.example.parcibiblioteca.Entity.AutoresConLibros
 import com.example.parcibiblioteca.Entity.Libros
 
 @Dao

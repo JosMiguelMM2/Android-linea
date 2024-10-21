@@ -50,6 +50,22 @@ fun MiembrosCreateScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+
+                    Button(
+                        onClick = {
+                            navController.navigate("MiembrosList")
+                        },
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colors.secondary,
+                            contentColor = colors.onPrimary
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    ) {
+                        Text("Miembros guardados", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                    }
                     OutlinedTextField(
                         value = nombre,
                         onValueChange = { nombre = it },

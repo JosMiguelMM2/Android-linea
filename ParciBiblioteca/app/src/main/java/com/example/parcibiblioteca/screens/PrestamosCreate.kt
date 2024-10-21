@@ -160,7 +160,8 @@ fun PrestamosCreateScreen(
                             if (selectedLibro != null && selectedMiembros != null && fechaPrestamo.isNotEmpty()) {
                                 val dateFormat = SimpleDateFormat("yyyy-MM-dd")
                                 val fechaPrestamoDate: Date = dateFormat.parse(fechaPrestamo)
-                                val fechaDevolucionDate: Date? = if (fechaDevolucion.isNotEmpty()) dateFormat.parse(fechaDevolucion) else null
+                                val fechaDevolucionDate: Date? = if (fechaDevolucion.isNotEmpty())
+                                    dateFormat.parse(fechaDevolucion) else null
                                 val nuevoPrestamo = Prestamos(
                                     libro_id = selectedLibro!!.libro_id,
                                     miembro_id = selectedMiembros!!.miembro_id,

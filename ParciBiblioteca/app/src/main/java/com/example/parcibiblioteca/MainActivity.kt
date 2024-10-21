@@ -11,15 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.parcibiblioteca.Dao.AutoresDao
-import com.example.parcibiblioteca.Dao.LibrosDao
-import com.example.parcibiblioteca.Dao.MiembrosDao
-import com.example.parcibiblioteca.Dao.PrestamosDao
+import com.example.parcibiblioteca.Dao.*
 import com.example.parcibiblioteca.Database.BibliotecaDatabase
-import com.example.parcibiblioteca.Repository.AutoresRepository
-import com.example.parcibiblioteca.Repository.LibrosRepository
-import com.example.parcibiblioteca.Repository.MiembrosRepository
-import com.example.parcibiblioteca.Repository.PrestamosRepository
+import com.example.parcibiblioteca.Repository.*
 import com.example.parcibiblioteca.screens.*
 import com.example.parcibiblioteca.ui.theme.ParciBibliotecaTheme
 
@@ -30,12 +24,14 @@ class MainActivity : ComponentActivity() {
     private lateinit var miembrosDao: MiembrosDao
     private lateinit var librosDao: LibrosDao
     private lateinit var prestamosDao: PrestamosDao
+    private lateinit var autoresConLibrosDao: AutoresConLibrosDao
 
     // Repositorios
     private lateinit var autoresRepository: AutoresRepository
     private lateinit var miembrosRepository: MiembrosRepository
     private lateinit var librosRepository: LibrosRepository
     private lateinit var prestamosRepository: PrestamosRepository
+    private lateinit var autoresConLibrosRepository: AutoresConLibrosRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +49,8 @@ class MainActivity : ComponentActivity() {
         prestamosDao = db.PrestamosDao()
         prestamosRepository = PrestamosRepository(prestamosDao)
 
+        autoresConLibrosDao = db.AutoresConLibrosDao()
+        autoresConLibrosRepository = AutoresConLibrosRepository(autoresConLibrosDao)
         // Modelos
 
         enableEdgeToEdge()
@@ -63,7 +61,8 @@ class MainActivity : ComponentActivity() {
                         autoresRepository = autoresRepository,
                         miembrosRepository = miembrosRepository,
                         librosRepository = librosRepository,
-                        prestamosRepository = prestamosRepository
+                        prestamosRepository = prestamosRepository,
+                        autoresConLibrosRepository = autoresConLibrosRepository
                     )
                 }
             }
@@ -76,7 +75,8 @@ fun navegationApp(
     autoresRepository: AutoresRepository,
     miembrosRepository: MiembrosRepository,
     librosRepository: LibrosRepository,
-    prestamosRepository: PrestamosRepository
+    prestamosRepository: PrestamosRepository,
+    autoresConLibrosRepository: AutoresConLibrosRepository
 ) {
     val navController = rememberNavController()
 
@@ -123,6 +123,18 @@ fun navegationApp(
         composable("AutoresList") {
             AutoresListScreen(
                 autoresRepository = autoresRepository
+            )
+        }
+
+        composable("MiembrosList") {
+            MiembrosListScreen(
+                miembrosRepository = miembrosRepository
+            )
+        }
+
+        composable("LibrosList") {
+            LibrosListScreen(
+                autoresConLibrosRepository = autoresConLibrosRepository
             )
         }
     }

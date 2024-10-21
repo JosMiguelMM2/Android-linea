@@ -64,6 +64,24 @@ fun LibrosCreateScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
+                    Button(
+                        onClick = {
+                            navController.navigate("librosList")
+                        },
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colors.secondary,
+                            contentColor = colors.onPrimary
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    ) {
+                        Text(
+                            "Libros Guardados", fontSize = 18.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
                     OutlinedTextField(
                         value = titulo,
                         onValueChange = { titulo = it },
@@ -92,7 +110,7 @@ fun LibrosCreateScreen(
                             .wrapContentSize(Alignment.TopStart)
                     ) {
                         Text(
-                            text = selectedAutor?.let{"${it.nombre} ${it.apellido}"} ?: "Selecciona un autor",
+                            text = selectedAutor?.let { "${it.nombre} ${it.apellido}" } ?: "Selecciona un autor",
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp)

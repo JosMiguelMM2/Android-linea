@@ -1,4 +1,3 @@
-// AutoresListScreen.kt
 package com.example.parcibiblioteca.screens
 
 import androidx.compose.foundation.background

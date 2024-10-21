@@ -10,7 +10,7 @@ interface AutoresConLibrosDao {
     @Transaction
     @Query(
         """
-        SELECT autores.*, libros.libro_id, libros.titulo, libros.genero, libros.autor_id
+        SELECT autores.*, libros.*
         FROM autores
         INNER JOIN libros ON autores.autor_id = libros.autor_id
     """
@@ -20,11 +20,11 @@ interface AutoresConLibrosDao {
     @Transaction
     @Query(
         """
-        SELECT autores.*, libros.libro_id, libros.titulo, libros.genero, libros.autor_id
+        SELECT autores.*, libros.*
         FROM autores
         INNER JOIN libros ON autores.autor_id = libros.autor_id
-        WHERE autores.autor_id = :autorId
+        WHERE libros.titulo = :titulo
     """
     )
-    suspend fun getAutorConLibros(autorId: Long): AutoresConLibros
+    suspend fun getLibroTitle(titulo: String): AutoresConLibros
 }
