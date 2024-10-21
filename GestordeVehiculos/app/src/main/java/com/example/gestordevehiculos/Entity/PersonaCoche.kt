@@ -5,9 +5,11 @@ import androidx.room.Relation
 
 data class PersonaConCoche(
     @Embedded val persona: Persona,
-    @Relation(
+    /*@Relation(
         parentColumn = "idPersona",
         entityColumn = "idPersona"
     )
-    val coche: Coche
+    val coche: Coche*/
+
+    @Embedded val coche: Coche
 )

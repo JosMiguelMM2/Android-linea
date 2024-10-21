@@ -21,3 +21,12 @@ data class Coche (
     val Caballos: Long,
     val idPersona: Int
 )
+
+data class CochePersonaDetails(
+    val Matricula: String,
+    val Marca: String,
+    val Modelo: String,
+    val Caballos: Long,
+    val Nombre: String,
+    val Apellido: String
+)

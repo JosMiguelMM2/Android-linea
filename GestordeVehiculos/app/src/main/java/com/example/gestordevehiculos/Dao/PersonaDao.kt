@@ -19,4 +19,5 @@ interface PersonaDao {
 
     @Delete
     suspend fun deletePersona(persona: Persona)
+
 }
