@@ -25,6 +25,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var librosDao: LibrosDao
     private lateinit var prestamosDao: PrestamosDao
     private lateinit var autoresConLibrosDao: AutoresConLibrosDao
+    private lateinit var librosConPrestamosDao: LibrosConPrestamosDao
 
     // Repositorios
     private lateinit var autoresRepository: AutoresRepository
@@ -32,6 +33,7 @@ class MainActivity : ComponentActivity() {
     private lateinit var librosRepository: LibrosRepository
     private lateinit var prestamosRepository: PrestamosRepository
     private lateinit var autoresConLibrosRepository: AutoresConLibrosRepository
+    private lateinit var librosConPrestamosRepository: LibrosConPrestamosRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +53,9 @@ class MainActivity : ComponentActivity() {
 
         autoresConLibrosDao = db.AutoresConLibrosDao()
         autoresConLibrosRepository = AutoresConLibrosRepository(autoresConLibrosDao)
+
+        librosConPrestamosDao = db.LibrosConPrestamosDao()
+        librosConPrestamosRepository = LibrosConPrestamosRepository(librosConPrestamosDao)
         // Modelos
 
         enableEdgeToEdge()
@@ -62,7 +67,8 @@ class MainActivity : ComponentActivity() {
                         miembrosRepository = miembrosRepository,
                         librosRepository = librosRepository,
                         prestamosRepository = prestamosRepository,
-                        autoresConLibrosRepository = autoresConLibrosRepository
+                        autoresConLibrosRepository = autoresConLibrosRepository,
+                        librosConPrestamosRepository = librosConPrestamosRepository
                     )
                 }
             }
@@ -76,7 +82,8 @@ fun navegationApp(
     miembrosRepository: MiembrosRepository,
     librosRepository: LibrosRepository,
     prestamosRepository: PrestamosRepository,
-    autoresConLibrosRepository: AutoresConLibrosRepository
+    autoresConLibrosRepository: AutoresConLibrosRepository,
+    librosConPrestamosRepository: LibrosConPrestamosRepository
 ) {
     val navController = rememberNavController()
 
@@ -135,6 +142,11 @@ fun navegationApp(
         composable("LibrosList") {
             LibrosListScreen(
                 autoresConLibrosRepository = autoresConLibrosRepository
+            )
+        }
+        composable("PrestamosList") {
+            PrestamosListScreen(
+                librosConPrestamosRepository = librosConPrestamosRepository
             )
         }
     }

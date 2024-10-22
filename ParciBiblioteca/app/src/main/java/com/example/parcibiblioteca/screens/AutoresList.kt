@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -18,7 +17,6 @@ import com.example.parcibiblioteca.Entity.Autores
 import com.example.parcibiblioteca.Model.AutoresViewModel
 import com.example.parcibiblioteca.Model.AutoresViewModelFactory
 import com.example.parcibiblioteca.Repository.AutoresRepository
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,12 +25,8 @@ fun AutoresListScreen(
     viewModel: AutoresViewModel = viewModel(factory = AutoresViewModelFactory(autoresRepository))
 ) {
     val autores = viewModel.autores
-    val scope = rememberCoroutineScope()
-
     LaunchedEffect(Unit) {
-        scope.launch {
-            viewModel.loadAutores()
-        }
+        viewModel.loadAutores()
     }
 
     Scaffold(
@@ -64,7 +58,7 @@ fun AutoresListScreen(
                         contentPadding = PaddingValues(16.dp)
                     ) {
                         items(autores.value) { autor ->
-                            AutorItem(autor)
+                            AutorItem(autor, viewModel)
                         }
                     }
                 }
@@ -74,7 +68,7 @@ fun AutoresListScreen(
 }
 
 @Composable
-fun AutorItem(autor: Autores) {
+fun AutorItem(autor: Autores, viewModel: AutoresViewModel) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -100,6 +94,16 @@ fun AutorItem(autor: Autores) {
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onSurface
             )
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(
+                onClick = { viewModel.deleteAutor(autor) },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = MaterialTheme.colorScheme.onError
+                )
+            ) {
+                Text("Eliminar")
+            }
         }
     }
 }

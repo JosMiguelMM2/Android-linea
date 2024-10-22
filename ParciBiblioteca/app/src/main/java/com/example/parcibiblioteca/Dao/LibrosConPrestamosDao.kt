@@ -10,7 +10,11 @@ interface LibrosConPrestamosDao {
     @Transaction
     @Query(
         """
-        SELECT * FROM libros
+        SELECT 
+            libros.*,
+            prestamos.*
+        FROM libros
+        LEFT JOIN prestamos ON libros.libro_id = prestamos.libro_id
         """
     )
     suspend fun getLibrosConPrestamos(): List<LibrosConPrestamos>
@@ -18,8 +22,12 @@ interface LibrosConPrestamosDao {
     @Transaction
     @Query(
         """
-        SELECT * FROM libros
-        WHERE libro_id = :libroId
+        SELECT 
+            libros.*,
+            prestamos.*
+        FROM libros
+        LEFT JOIN prestamos ON libros.libro_id = prestamos.libro_id
+        WHERE libros.libro_id = :libroId
         """
     )
     suspend fun getLibroConPrestamos(libroId: Long): LibrosConPrestamos

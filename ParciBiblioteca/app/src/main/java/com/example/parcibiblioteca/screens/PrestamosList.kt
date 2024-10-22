@@ -14,29 +14,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.parcibiblioteca.Entity.AutoresConLibros
-import com.example.parcibiblioteca.Model.AutoresConLibrosModel
-import com.example.parcibiblioteca.Model.AutoresConLibrosModelFactory
-import com.example.parcibiblioteca.Repository.AutoresConLibrosRepository
+import com.example.parcibiblioteca.Model.LibrosConPrestamosModel
+import com.example.parcibiblioteca.Model.LibrosConPrestamosModelFactory
+import com.example.parcibiblioteca.Repository.LibrosConPrestamosRepository
+import com.example.parcibiblioteca.Entity.LibrosConPrestamos
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LibrosListScreen(
-    autoresConLibrosRepository: AutoresConLibrosRepository,
-    viewModel: AutoresConLibrosModel = viewModel(
-        factory = AutoresConLibrosModelFactory(autoresConLibrosRepository)
+fun PrestamosListScreen(
+    librosConPrestamosRepository: LibrosConPrestamosRepository,
+    viewModel: LibrosConPrestamosModel = viewModel(
+        factory = LibrosConPrestamosModelFactory(librosConPrestamosRepository)
     )
 ) {
-    val librosConAutores by viewModel.autoresConLibros
+    val librosConPrestamos by viewModel.librosConPrestamos
 
     LaunchedEffect(Unit) {
-        viewModel.fetchAutoresConLibros()
+        viewModel.fetchLibrosConPrestamos()
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Libros") },
+                title = { Text("Prestamos") },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
@@ -49,9 +49,9 @@ fun LibrosListScreen(
                     .padding(padding)
                     .background(MaterialTheme.colorScheme.background)
             ) {
-                if (librosConAutores.isEmpty()) {
+                if (librosConPrestamos.isEmpty()) {
                     Text(
-                        text = "No hay libros disponibles",
+                        text = "No hay prestamos disponibles",
                         modifier = Modifier.align(Alignment.Center),
                         color = MaterialTheme.colorScheme.onBackground,
                         fontSize = 18.sp
@@ -61,8 +61,8 @@ fun LibrosListScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(16.dp)
                     ) {
-                        items(librosConAutores) { autorConLibros ->
-                            LibroItem(autorConLibros)
+                        items(librosConPrestamos) { libroConPrestamos ->
+                            PrestamoItem(libroConPrestamos)
                         }
                     }
                 }
@@ -72,8 +72,7 @@ fun LibrosListScreen(
 }
 
 @Composable
-fun LibroItem(autoresConLibros: AutoresConLibros) {
-    println("ccc")
+fun PrestamoItem(librosConPrestamos: LibrosConPrestamos) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -85,23 +84,21 @@ fun LibroItem(autoresConLibros: AutoresConLibros) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "${autoresConLibros.autor.nombre} " +
-                        "${autoresConLibros.autor.apellido} " +
-                        "(${autoresConLibros.autor.nacionalidad})",
+                text = "Libro: ${librosConPrestamos.libro.titulo}",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
             )
             Spacer(modifier = Modifier.height(8.dp))
-            autoresConLibros.libros.forEach { libro ->
+            librosConPrestamos.prestamos.forEach { prestamo ->
                 Text(
-                    text = "Título: ${libro.titulo}",
+                    text = "Fecha prestamo : ${prestamo.fecha_prestamo}",
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Género: ${libro.genero}",
+                    text = "Fecha devolución : ${prestamo.fecha_devolucion}",
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onSurface
                 )

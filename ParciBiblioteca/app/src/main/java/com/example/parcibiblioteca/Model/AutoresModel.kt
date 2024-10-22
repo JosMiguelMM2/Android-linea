@@ -18,6 +18,14 @@ class AutoresViewModel(private val autoresRepository: AutoresRepository) : ViewM
             _autores.value = autoresRepository.getAllAutores()
         }
     }
+    //eliminar el autor
+    fun deleteAutor(autor: Autores) {
+        viewModelScope.launch {
+            autoresRepository.deleteAutor(autor)
+            loadAutores()
+        }
+    }
+
 }
 
 class AutoresViewModelFactory(private val autoresRepository: AutoresRepository) : ViewModelProvider.Factory {

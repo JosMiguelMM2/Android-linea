@@ -66,7 +66,21 @@ fun PrestamosCreateScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
+                    Button(
+                        onClick = {
+                            navController.navigate("PrestamosList")
+                        },
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colors.secondary,
+                            contentColor = colors.onPrimary
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
+                    ) {
+                        Text("Prestamos", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                    }
                     // Aquí reemplazamos el Dropdown con una implementación simple
                     Box(
                         modifier = Modifier

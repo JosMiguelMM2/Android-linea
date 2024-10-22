@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 class AutoresConLibrosModel(private val repository: AutoresConLibrosRepository) : ViewModel() {
 
     val autoresConLibros = mutableStateOf<List<AutoresConLibros>>(emptyList())
-
     fun fetchAutoresConLibros() {
         viewModelScope.launch {
             val data = repository.getAutoresConLibros()
@@ -22,6 +21,7 @@ class AutoresConLibrosModel(private val repository: AutoresConLibrosRepository) 
             autoresConLibros.value = groupedData
         }
     }
+
 
     fun fetchLibroByTitle(titulo: String) {
         viewModelScope.launch {
