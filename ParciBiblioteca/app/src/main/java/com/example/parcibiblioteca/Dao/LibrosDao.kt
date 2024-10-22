@@ -18,6 +18,6 @@ interface LibrosDao {
     @Update
     suspend fun updateLibros(libros: Libros)
 
-    @Delete
-    suspend fun deleteLibros(libros: Libros)
+    @Query("DELETE FROM libros WHERE libro_id = :id")
+    suspend fun deleteLibros(id: Long)
 }

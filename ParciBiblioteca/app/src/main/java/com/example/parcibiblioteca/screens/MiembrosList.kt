@@ -5,9 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -26,7 +24,7 @@ fun MiembrosListScreen(
     miembrosRepository: MiembrosRepository,
     viewModel: MiembrosViewModel = viewModel(factory = MiembrosViewModelFactory(miembrosRepository))
 ) {
-    val miembros = viewModel.miembros
+    val miembros by viewModel.miembros.collectAsState()
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
@@ -51,7 +49,7 @@ fun MiembrosListScreen(
                     .padding(padding)
                     .background(MaterialTheme.colorScheme.background)
             ) {
-                if (miembros.value.isEmpty()) {
+                if (miembros.isEmpty()) {
                     Text(
                         text = "No hay miembros disponibles",
                         modifier = Modifier.align(Alignment.Center),
@@ -63,8 +61,12 @@ fun MiembrosListScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(16.dp)
                     ) {
-                        items(miembros.value) { miembro ->
-                            MiembroItem(miembro)
+                        items(miembros) { miembro ->
+                            MiembroItem(miembro, miembrosRepository) {
+                                scope.launch {
+                                    viewModel.loadMiembros()
+                                }
+                            }
                         }
                     }
                 }
@@ -74,7 +76,9 @@ fun MiembrosListScreen(
 }
 
 @Composable
-fun MiembroItem(miembro: Miembros) {
+fun MiembroItem(miembro: Miembros, miembrosRepository: MiembrosRepository, onDelete: () -> Unit) {
+    val scope = rememberCoroutineScope()
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -100,6 +104,21 @@ fun MiembroItem(miembro: Miembros) {
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onSurface
             )
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(
+                onClick = {
+                    scope.launch {
+                        miembrosRepository.deleteMiembros(miembro)
+                        onDelete()
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = MaterialTheme.colorScheme.onError
+                )
+            ) {
+                Text("Eliminar")
+            }
         }
     }
 }

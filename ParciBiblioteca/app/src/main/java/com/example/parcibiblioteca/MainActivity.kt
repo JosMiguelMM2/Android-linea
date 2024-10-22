@@ -141,7 +141,8 @@ fun navegationApp(
 
         composable("LibrosList") {
             LibrosListScreen(
-                autoresConLibrosRepository = autoresConLibrosRepository
+                autoresConLibrosRepository = autoresConLibrosRepository,
+                librosRepository = librosRepository
             )
         }
         composable("PrestamosList") {

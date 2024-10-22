@@ -8,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -18,6 +19,8 @@ import com.example.parcibiblioteca.Entity.AutoresConLibros
 import com.example.parcibiblioteca.Model.AutoresConLibrosModel
 import com.example.parcibiblioteca.Model.AutoresConLibrosModelFactory
 import com.example.parcibiblioteca.Repository.AutoresConLibrosRepository
+import com.example.parcibiblioteca.Repository.LibrosRepository
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,9 +28,12 @@ fun LibrosListScreen(
     autoresConLibrosRepository: AutoresConLibrosRepository,
     viewModel: AutoresConLibrosModel = viewModel(
         factory = AutoresConLibrosModelFactory(autoresConLibrosRepository)
-    )
+    ),
+    librosRepository: LibrosRepository
+
 ) {
     val librosConAutores by viewModel.autoresConLibros
+
 
     LaunchedEffect(Unit) {
         viewModel.fetchAutoresConLibros()
@@ -62,7 +68,7 @@ fun LibrosListScreen(
                         contentPadding = PaddingValues(16.dp)
                     ) {
                         items(librosConAutores) { autorConLibros ->
-                            LibroItem(autorConLibros)
+                            LibroItem(autorConLibros, librosRepository)
                         }
                     }
                 }
@@ -72,8 +78,9 @@ fun LibrosListScreen(
 }
 
 @Composable
-fun LibroItem(autoresConLibros: AutoresConLibros) {
+fun LibroItem(autoresConLibros: AutoresConLibros, librosRepository: LibrosRepository) {
     println("ccc")
+    val scope = rememberCoroutineScope()
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -106,6 +113,20 @@ fun LibroItem(autoresConLibros: AutoresConLibros) {
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(8.dp))
+                Button(
+                    onClick = {
+                        scope.launch {
+                            librosRepository.deleteLibros(libro.libro_id)
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError
+                    )
+                ) {
+                    Text("Eliminar")
+                }
+
             }
         }
     }

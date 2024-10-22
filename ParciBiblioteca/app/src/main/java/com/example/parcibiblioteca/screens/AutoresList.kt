@@ -5,8 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -17,6 +16,7 @@ import com.example.parcibiblioteca.Entity.Autores
 import com.example.parcibiblioteca.Model.AutoresViewModel
 import com.example.parcibiblioteca.Model.AutoresViewModelFactory
 import com.example.parcibiblioteca.Repository.AutoresRepository
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,7 +24,9 @@ fun AutoresListScreen(
     autoresRepository: AutoresRepository,
     viewModel: AutoresViewModel = viewModel(factory = AutoresViewModelFactory(autoresRepository))
 ) {
-    val autores = viewModel.autores
+    val autores by viewModel.autores.collectAsState()
+    val scope = rememberCoroutineScope()
+
     LaunchedEffect(Unit) {
         viewModel.loadAutores()
     }
@@ -45,7 +47,7 @@ fun AutoresListScreen(
                     .padding(padding)
                     .background(MaterialTheme.colorScheme.background)
             ) {
-                if (autores.value.isEmpty()) {
+                if (autores.isEmpty()) {
                     Text(
                         text = "No hay autores disponibles",
                         modifier = Modifier.align(Alignment.Center),
@@ -57,8 +59,12 @@ fun AutoresListScreen(
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(16.dp)
                     ) {
-                        items(autores.value) { autor ->
-                            AutorItem(autor, viewModel)
+                        items(autores) { autor ->
+                            AutorItem(autor, viewModel) {
+                                scope.launch {
+                                    viewModel.loadAutores()
+                                }
+                            }
                         }
                     }
                 }
@@ -68,7 +74,9 @@ fun AutoresListScreen(
 }
 
 @Composable
-fun AutorItem(autor: Autores, viewModel: AutoresViewModel) {
+fun AutorItem(autor: Autores, viewModel: AutoresViewModel, onDelete: () -> Unit) {
+    val scope = rememberCoroutineScope()
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -96,7 +104,12 @@ fun AutorItem(autor: Autores, viewModel: AutoresViewModel) {
             )
             Spacer(modifier = Modifier.height(8.dp))
             Button(
-                onClick = { viewModel.deleteAutor(autor) },
+                onClick = {
+                    scope.launch {
+                        viewModel.deleteAutor(autor)
+                        onDelete()
+                    }
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.error,
                     contentColor = MaterialTheme.colorScheme.onError

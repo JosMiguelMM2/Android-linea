@@ -21,7 +21,7 @@ class LibrosRepository(private val librosDao: LibrosDao) {
         librosDao.updateLibros(libros)
     }
 
-    suspend fun deleteLibros(libros: Libros) {
-        librosDao.deleteLibros(libros)
+    suspend fun deleteLibros(id: Long) {
+        librosDao.deleteLibros(id)
     }
 }
